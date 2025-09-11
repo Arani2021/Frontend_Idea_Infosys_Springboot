@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel Page: Milestone - 4</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background: #f0fdf4;
+            color: #1f2937;
+            transition: all 0.3s ease;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: #166534;
+            color: #fff;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .logo h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #bbf7d0;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .user-info .name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .user-info .role {
+            font-size: 0.9rem;
+            color: #a7f3d0;
+        }
+
+        .nav-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-title {
+            font-size: 0.9rem;
+            color: #a7f3d0;
+            margin: 12px 0 8px;
+            font-weight: 500;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background: #16a34a;
+            color: #fff;
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+            background: #ffffff;
+            border-radius: 12px 0 0 12px;
+            margin: 16px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .search-bar {
+            position: relative;
+            max-width: 400px;
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 40px 10px 15px;
+            border: 1px solid #d1fae5;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #f0fdf4;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #166534;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: none;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: #166534;
+        }
+
+        .icon-btn:hover {
+            background-color: #f0fdf4;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #14532d;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: #6b7280;
+            font-size: 1rem;
+            margin-bottom: 32px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: #fff;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-icon.users { background: #dbeafe; color: #3b82f6; }
+        .stat-icon.pickups { background: #d1fae5; color: #22c55e; }
+        .stat-icon.pending { background: #fef3c7; color: #f59e0b; }
+        .stat-icon.opportunities { background: #e9d5ff; color: #8b5cf6; }
+
+        .stat-content h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #14532d;
+            margin-bottom: 4px;
+        }
+
+        .stat-content p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* Reports Section */
+        .reports-section {
+            background: #fff;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #14532d;
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .report-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border: 1px solid #d1fae5;
+            background: #f0fdf4;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #166534;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .report-btn:hover {
+            background: #dcfce7;
+            border-color: #16a34a;
+        }
+
+        .report-icon {
+            font-size: 20px;
+        }
+
+        /* Admin Tabs */
+        .admin-tabs {
+            display: flex;
+            gap: 2px;
+            background: #f0fdf4;
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 24px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            background: none;
+            color: #166534;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #fff;
+            color: #14532d;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Users Section */
+        .users-section {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .users-header {
+            padding: 24px;
+            border-bottom: 1px solid #d1fae5;
+        }
+
+        .users-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #14532d;
+            margin-bottom: 8px;
+        }
+
+        .users-subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .users-search {
+            position: relative;
+            max-width: 300px;
+        }
+
+        .users-search-input {
+            width: 100%;
+            padding: 8px 36px 8px 12px;
+            border: 1px solid #d1fae5;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #f0fdf4;
+        }
+
+        .users-search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #166534;
+        }
+
+        .users-content {
+            padding: 24px;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #d1fae5;
+            border-radius: 50%;
+            border-top-color: #22c55e;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid #d1fae5;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .toggle-switch {
+            width: 40px;
+            height: 20px;
+            background: #d1fae5;
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .toggle-switch.active {
+            background: #22c55e;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(20px);
+        }
+
+        /* Dark Mode */
+        body.dark {
+            background: #0f172a;
+            color: #e5e7eb;
+        }
+
+        body.dark .main-content {
+            background: #1e293b;
+        }
+
+        body.dark .sidebar {
+            background: #052e16;
+        }
+
+        body.dark .sidebar .logo h2 {
+            color: #86efac;
+        }
+
+        body.dark .user-info {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        body.dark .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        body.dark .nav-item.active {
+            background: #22c55e;
+        }
+
+        body.dark .stat-card,
+        body.dark .reports-section,
+        body.dark .users-section {
+            background: #1e293b;
+            box-shadow: none;
+        }
+
+        body.dark .page-title,
+        body.dark .section-title,
+        body.dark .users-title {
+            color: #86efac;
+        }
+
+        body.dark .page-subtitle,
+        body.dark .section-subtitle,
+        body.dark .users-subtitle {
+            color: #d1d5db;
+        }
+
+        body.dark .search-input,
+        body.dark .users-search-input {
+            background: #334155;
+            border-color: #475569;
+            color: #e5e7eb;
+        }
+
+        body.dark .stat-content h3 {
+            color: #86efac;
+        }
+
+        body.dark .report-btn {
+            background: #334155;
+            border-color: #475569;
+            color: #86efac;
+        }
+
+        body.dark .report-btn:hover {
+            background: #475569;
+            border-color: #22c55e;
+        }
+
+        body.dark .admin-tabs {
+            background: #334155;
+        }
+
+        body.dark .tab-btn {
+            color: #86efac;
+        }
+
+        body.dark .tab-btn.active {
+            background: #1e293b;
+            color: #86efac;
+        }
+
+        body.dark .dark-mode-toggle {
+            background: #1e293b;
+            border-color: #475569;
+            color: #e5e7eb;
+        }
+
+        body.dark .users-header {
+            border-bottom-color: #475569;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                margin: 0;
+                border-radius: 0;
+                padding: 16px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .admin-tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <h2>♻ WasteZero</h2>
+        </div>
+
+        <div class="user-info">
+            <div class="name">Venu</div>
+            <div class="role">Admin</div>
+        </div>
+
+        <nav class="nav-section">
+            <div class="nav-title">Main Menu</div>
+            <div class="nav-item">
+                <span class="nav-icon">📊</span>
+                Dashboard
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">📅</span>
+                Schedule Pickup
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">🎯</span>
+                Opportunities
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">💬</span>
+                Messages
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">📈</span>
+                My Impact
+            </div>
+        </nav>
+
+        <nav class="nav-section">
+            <div class="nav-title">Settings</div>
+            <div class="nav-item">
+                <span class="nav-icon">👤</span>
+                My Profile
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">⚙️</span>
+                Settings
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">❓</span>
+                Help & Support
+            </div>
+            <div class="nav-item active">
+                <span class="nav-icon">🔧</span>
+                Admin Panel
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search pickups, opportunities...">
+                <span class="search-icon">🔍</span>
+            </div>
+            <div class="header-controls">
+                <button class="icon-btn">🔔</button>
+                <button class="icon-btn">V ▼</button>
+            </div>
+        </div>
+
+        <h1 class="page-title">Admin Dashboard</h1>
+        <p class="page-subtitle">Manage platform users, monitor activity, and generate reports</p>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon users">👥</div>
+                <div class="stat-content">
+                    <h3>0</h3>
+                    <p>Total Users</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon pickups">✅</div>
+                <div class="stat-content">
+                    <h3>0</h3>
+                    <p>Completed Pickups</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon pending">⏳</div>
+                <div class="stat-content">
+                    <h3>0</h3>
+                    <p>Pending Pickups</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon opportunities">📋</div>
+                <div class="stat-content">
+                    <h3>0</h3>
+                    <p>Active Opportunities</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Section -->
+        <div class="reports-section">
+            <h2 class="section-title">Generate Reports</h2>
+            <p class="section-subtitle">Download platform statistics and activity reports</p>
+            
+            <div class="reports-grid">
+                <button class="report-btn" onclick="generateReport('users')">
+                    <span class="report-icon">👥</span>
+                    Users Report
+                </button>
+                
+                <button class="report-btn" onclick="generateReport('pickups')">
+                    <span class="report-icon">📦</span>
+                    Pickups Report
+                </button>
+                
+                <button class="report-btn" onclick="generateReport('opportunities')">
+                    <span class="report-icon">🎯</span>
+                    Opportunities Report
+                </button>
+                
+                <button class="report-btn" onclick="generateReport('activity')">
+                    <span class="report-icon">📊</span>
+                    Full Activity Report
+                </button>
+            </div>
+        </div>
+
+        <!-- Admin Tabs -->
+        <div class="admin-tabs">
+            <button class="tab-btn active" onclick="switchTab('users')">Manage Users</button>
+            <button class="tab-btn" onclick="switchTab('logs')">Admin Logs</button>
+        </div>
+
+        <!-- Users Section -->
+        <div class="users-section">
+            <div class="users-header">
+                <h3 class="users-title">Users</h3>
+                <p class="users-subtitle">Manage user accounts and permissions</p>
+                
+                <div class="users-search">
+                    <input type="text" class="users-search-input" placeholder="Search users...">
+                    <span class="users-search-icon">🔍</span>
+                </div>
+            </div>
+            
+            <div class="users-content">
+                <div class="loading-spinner"></div>
+                <p>Loading user data...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle">
+        <span>Dark Mode</span>
+        <div class="toggle-switch" onclick="toggleDarkMode()"></div>
+    </div>
+
+    <script>
+        function toggleDarkMode() {
+            const body = document.body;
+            const toggle = document.querySelector('.toggle-switch');
+            
+            body.classList.toggle('dark');
+            toggle.classList.toggle('active');
+            
+            // Save preference to localStorage
+            const isDarkMode = body.classList.contains('dark');
+            localStorage.setItem('darkMode', isDarkMode);
+        }
+
+        // Load dark mode preference on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedDarkMode = localStorage.getItem('darkMode');
+            if (savedDarkMode === 'true') {
+                document.body.classList.add('dark');
+                document.querySelector('.toggle-switch').classList.add('active');
+            }
+        });
+
+        // Navigation functionality
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all items
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+            });
+        });
+
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update content based on tab
+            const usersContent = document.querySelector('.users-content');
+            
+            if (tabName === 'users') {
+                usersContent.innerHTML = `
+                    <div class="loading-spinner"></div>
+                    <p>Loading user data...</p>
+                `;
+                
+                // Simulate loading users
+                setTimeout(() => {
+                    usersContent.innerHTML = `
+                        <p>No users found. User management features will be available once users register.</p>
+                    `;
+                }, 1500);
+                
+            } else if (tabName === 'logs') {
+                usersContent.innerHTML = `
+                    <div class="loading-spinner"></div>
+                    <p>Loading admin logs...</p>
+                `;
+                
+                // Simulate loading logs
+                setTimeout(() => {
+                    usersContent.innerHTML = `
+                        <p>Admin activity logs will appear here as administrators perform actions.</p>
+                    `;
+                }, 1500);
+            }
+        }
+
+        // Report generation functionality
+        function generateReport(reportType) {
+            const reportNames = {
+                'users': 'Users Report',
+                'pickups': 'Pickups Report',
+                'opportunities': 'Opportunities Report',
+                'activity': 'Full Activity Report'
+            };
+            
+            const button = event.target.closest('.report-btn');
+            const originalText = button.innerHTML;
+            
+            // Show loading state
+            button.innerHTML = `
+                <span class="report-icon">⏳</span>
+                Generating...
+            `;
+            button.style.pointerEvents = 'none';
+            
+            // Simulate report generation
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.style.pointerEvents = 'auto';
+                
+                // Show success message
+                alert(`${reportNames[reportType]} has been generated and downloaded!`);
+            }, 2000);
+        }
+
+        // Simulate stats updates
+        function updateStats() {
+            const stats = [
+                Math.floor(Math.random() * 100),
+                Math.floor(Math.random() * 50),
+                Math.floor(Math.random() * 25),
+                Math.floor(Math.random() * 15)
+            ];
+            
+            const statElements = document.querySelectorAll('.stat-content h3');
+            statElements.forEach((element, index) => {
+                element.textContent = stats[index];
+            });
+        }
+
+        // Update stats every 10 seconds (simulation)
+        setInterval(updateStats, 10000);
+
+        // Search functionality
+        document.querySelector('.users-search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            console.log('Searching users for:', searchTerm);
+            // Simulate user search functionality
+        });
+
+        // Initialize with some sample stats after a delay
+        setTimeout(updateStats, 2000);
+    </script>
+</body>
+</html>

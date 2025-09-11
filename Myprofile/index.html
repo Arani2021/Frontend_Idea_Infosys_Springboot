@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>♻ WasteZero</h2>
+    <div class="user-info">
+      <p class="name">Venu</p>
+      <span class="role">Admin</span>
+    </div>
+    <nav>
+      <a href="#">Dashboard</a>
+      <a href="#">Schedule Pickup</a>
+      <a href="#">Opportunities</a>
+      <a href="#">Messages</a>
+      <a href="#">My Impact</a>
+    </nav>
+    <hr />
+    <nav>
+      <a href="#">My Profile</a>
+      <a href="#">Settings</a>
+      <a href="#">Help & Support</a>
+      <a href="#">Admin Panel</a>
+    </nav>
+    <div class="toggle-dark">
+      <label>
+        <input type="checkbox" id="darkMode" /> Dark Mode
+      </label>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="content">
+    <header>
+      <input type="text" placeholder="Search pickups, opportunities..." />
+      <div class="icons">🔔 ⚙</div>
+    </header>
+
+    <section class="profile-section">
+      <h1>My Profile</h1>
+      <p class="subtitle">Manage your account information and settings</p>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="showTab('profile', event)">Profile</button>
+        <button class="tab" onclick="showTab('password', event)">Password</button>
+      </div>
+
+      <!-- Profile Info -->
+      <div id="profile" class="tab-content active">
+        <h2>Personal Information</h2>
+        <form>
+          <label>Full Name</label>
+          <input type="text" placeholder="Enter your name" />
+
+          <label>Email</label>
+          <input type="email" placeholder="Enter your email id" />
+
+          <label>Location</label>
+          <input type="text" placeholder="Enter your location" />
+
+          <label>Skills</label>
+          <input type="text" placeholder="Enter your skills (e.g. teamwork, recycling...)" />
+
+          <button type="submit">Save Changes</button>
+        </form>
+      </div>
+
+      <!-- Password Change -->
+      <div id="password" class="tab-content">
+        <h2>Change Password</h2>
+        <form>
+          <label>Current Password</label>
+          <input type="password" placeholder="Enter current password" />
+
+          <label>New Password</label>
+          <input type="password" placeholder="Enter new password" />
+
+          <label>Confirm Password</label>
+          <input type="password" placeholder="Re-enter new password" />
+
+          <button type="submit">Update Password</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
